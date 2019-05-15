@@ -1,7 +1,7 @@
 /**
  * 날짜 : 2019/05/14
  * 이름 : 배한솔
- * 내용 : 우편번호 검색
+ * 내용 : 다음 우편번호 함수
  */
 function zipcode() {
 	new daum.Postcode({

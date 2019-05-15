@@ -9,14 +9,13 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="/board1/js/userDuplicateCheck.js"></script>
 		<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-		<script src="/board1/js/zipcode.js">
-		</script>
-		
+		<script src="/board1/js/zipcode.js"></script>
+		<script src="/board1/js/userRegValidation.js"></script>
 	</head>
 	<body>
 		<div id="member">
 			<section class="register">
-				<form action="./proc/register.jsp" method="POST">
+				<form id="regForm" action="./proc/register.jsp" method="POST">
 					<section>
 						<table>
 							<caption>사이트 이용정보 입력</caption>
@@ -87,7 +86,7 @@
 			
 					</section>
 					<div>
-						<a href="#" class="cancel">취소</a> 
+						<a href="/board1/user/login.jsp" class="cancel">취소</a> 
 						<input type="submit" class="join" value="회원가입" />
 					</div>
 				</form>

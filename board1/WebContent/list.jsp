@@ -1,4 +1,8 @@
+<%@page import="kr.co.board1.bean.UserBean"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	UserBean ub = (UserBean) session.getAttribute("user");
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -11,7 +15,7 @@
 			<h3>글목록</h3>
 			<!-- 리스트 -->
 			<div class="list">
-				<p class="logout">홍길동님! 반갑습니다. <a href="#">[로그아웃]</a><p>
+				<p class="logout"><%= ub.getNick() %>님! 반갑습니다. <a href="/board1/user/proc/logout.jsp">[로그아웃]</a><p>
 				<table>
 					<tr>
 						<td>번호</td>

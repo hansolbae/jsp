@@ -11,7 +11,7 @@
 <%
 	UserBean ub = (UserBean) session.getAttribute("user");
 	String nick = null;
-	
+	 
 	List<BoardBean> list = new ArrayList<>(); // List<BoardBean> list : 선언, list = new ArrayList<>(); : 생성
 
 	if(ub == null){		// 세션에 저장되어 있는 사용자 정보가 없음

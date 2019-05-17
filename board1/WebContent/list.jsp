@@ -47,7 +47,6 @@
 			bb.setNick(rs.getString(12));
 			
 			list.add(bb);
-			
 		}
 		
 		// 6단계

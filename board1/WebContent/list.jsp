@@ -1,7 +1,64 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.board1.bean.BoardBean"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="kr.co.board1.config.SQL"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.board1.config.DBConfig"%>
 <%@page import="kr.co.board1.bean.UserBean"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	UserBean ub = (UserBean) session.getAttribute("user");
+	String nick = null;
+	
+	List<BoardBean> list = new ArrayList<>(); // List<BoardBean> list : 선언, list = new ArrayList<>(); : 생성
+
+	if(ub == null){		// 세션에 저장되어 있는 사용자 정보가 없음
+		// 로그인을 안 했을 때(로그인 하도록 돌려보냄)
+		response.sendRedirect("./user/login.jsp?result=101");
+	}else{				// 세션에 저장되어 있는 사용자 정보가 있음
+		// 로그인을 했을 때
+		nick = ub.getNick();
+	
+		// 1단계, 2단계
+		Connection conn = DBConfig.getConnection();
+		
+		// 3단계
+		PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_LIST); // '?'가 없기 때문에 맵핑할 데이터가 없음
+		
+		// 4단계
+		ResultSet rs = psmt.executeQuery(); // rs : 게시판 글들은 하나의 레코드가 아님(복수)
+		
+		// 5단계
+		while(rs.next()){	// 하나 이상의 레코드 → while문 사용
+			BoardBean bb = new BoardBean();
+			bb.setSeq(rs.getInt(1));
+			bb.setParent(rs.getInt(2));
+			bb.setComment(rs.getInt(3));
+			bb.setCate(rs.getString(4));
+			bb.setTitle(rs.getString(5));
+			bb.setContent(rs.getString(6));
+			bb.setFile(rs.getInt(7));
+			bb.setHit(rs.getInt(8));
+			bb.setUid(rs.getString(9));
+			bb.setRegip(rs.getString(10));
+			bb.setRdate(rs.getString(11));
+			bb.setNick(rs.getString(12));
+			
+			list.add(bb);
+			
+		}
+		
+		// 6단계
+		rs.close();
+		psmt.close();
+		conn.close();
+	}
+	
+	
+	
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -15,7 +72,7 @@
 			<h3>글목록</h3>
 			<!-- 리스트 -->
 			<div class="list">
-				<p class="logout"><%= ub.getNick() %>님! 반갑습니다. <a href="/board1/user/proc/logout.jsp">[로그아웃]</a><p>
+				<p class="logout"><%= nick %>님! 반갑습니다. <a href="/board1/user/proc/logout.jsp">[로그아웃]</a><p>
 				<table>
 					<tr>
 						<td>번호</td>
@@ -25,13 +82,16 @@
 						<td>조회</td>
 					</tr>
 				
+					<% for(BoardBean bb : list){ %>
 					<tr>
-						<td>1</td>
-						<td><a href="#">테스트 제목입니다.</a>&nbsp;[3]</td>
-						<td>홍길동</td>
-						<td>18-03-01</td>
-						<td>12</td>
+						<td><%= bb.getSeq() %></td>
+						<td><a href="#"><%= bb.getTitle() %></a>&nbsp;[<%= bb.getComment() %>]</td>
+						<td><%= bb.getNick() %></td>
+						<td><%= bb.getRdate().substring(2, 10) %></td>
+						<td><%= bb.getHit() %></td>
 					</tr>
+					<% } %>
+					
 				</table>
 			</div>
 			<!-- 페이징 -->
@@ -42,7 +102,7 @@
 				<a href="#" class="next">다음</a>
 				</span>
 			</nav>
-			<a href="#" class="btnWrite">글쓰기</a>
+			<a href="/board1/write.jsp" class="btnWrite">글쓰기</a>
 		</div>
 	</body>
 

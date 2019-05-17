@@ -1,3 +1,6 @@
+<%@page import="kr.co.board1.config.DBConfig"%>
+<%@page import="kr.co.board1.config.SQL"%>
+<%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -9,22 +12,15 @@
 
 	String email = request.getParameter("email");
 	
-	// 데이터베이스 정보
-	final String HOST = "jdbc:mysql://192.168.0.161:3306/bhs";
-	final String USER = "bhs";
-	final String PASS = "1234";
-		
-	// 1단계
-	Class.forName("com.mysql.jdbc.Driver");
-	
-	// 2단계
-	Connection conn = DriverManager.getConnection(HOST, USER, PASS);
+	// 1단계, 2단계
+	Connection conn = DBConfig.getConnection();
 	
 	// 3단계
-	Statement stmt = conn.createStatement();
+	PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_EMAIL_COUNT);
+	psmt.setString(1, email);
 	
 	// 4단계
-	ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM `JSP_USER` WHERE email='"+email+"';");
+	ResultSet rs = psmt.executeQuery();
 	
 	// 5단계
 	int count = 0; // 초기화
@@ -35,7 +31,7 @@
 	
 	// 6단계
 	rs.close();
-	stmt.close();
+	psmt.close();
 	conn.close();
 	
 	// JSON 데이터생성 및 전송

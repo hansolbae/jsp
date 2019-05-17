@@ -1,4 +1,6 @@
 <!-- 처리페이지 -->
+<%@page import="kr.co.board1.config.SQL"%>
+<%@page import="kr.co.board1.config.DBConfig"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.DriverManager"%>
@@ -20,38 +22,14 @@
 	String addr2 = request.getParameter("addr2");
 	String regip = request.getRemoteAddr();
 	
-	// 데이터베이스 정보
-	final String HOST = "jdbc:mysql://192.168.0.161:3306/bhs";
-	final String USER = "bhs";
-	final String PASS = "1234";
-		
-	Connection conn = null;
-	PreparedStatement psmt = null;
-	
-	// 1단계
-	Class.forName("com.mysql.jdbc.Driver");
-	
-	// 2단계
-	conn = DriverManager.getConnection(HOST, USER, PASS);
+	// DBConfig : 데이터베이스 정보 및 1~2단계
+	Connection conn = DBConfig.getConnection();
+	/* DBConfig에 'static'이 없다면 객체 생성을 해주어야 함
+	   DBConfig dbc = new DBConfig();
+	   Connection conn = dbc.getConnection(); */
 	
 	// 3단계
-	String sql = "INSERT INTO `JSP_USER` SET ";
-		// sql += "uid='"+id+"',";
-		   sql += "uid=?,";
-	    // PASSWORD() 내장함수 이용
-		   sql += "pass=PASSWORD(?),";
-		   sql += "name=?,";
-		   sql += "nick=?,";
-		   sql += "email=?,";
-		   sql += "hp=?,";
-		// grade : 디폴트 값(2)이 설정되어 있으므로 생략
-		   sql += "zip=?,";
-		   sql += "addr1=?,";
-		   sql += "addr2=?,";
-		   sql += "regip=?,";
-		   sql += "rdate=NOW()";
-	
-	psmt = conn.prepareStatement(sql);
+	PreparedStatement psmt = conn.prepareStatement(SQL.INSERT_USER);
 	psmt.setString(1, id);
 	psmt.setString(2, pw1);
 	psmt.setString(3, name);

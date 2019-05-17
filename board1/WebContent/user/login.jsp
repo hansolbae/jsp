@@ -16,6 +16,11 @@
 			if(result == 'fail'){
 				alert('로그인 실패\n아이디, 비밀번호를 다시 확인하십시오.');
 			}
+			
+			if(result == '101'){
+				alert('목록 실패\n로그인을 해야 합니다.');
+			}
+			
 		</script>
 	</head>
 	<body>

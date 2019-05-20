@@ -1,3 +1,4 @@
+<%@page import="kr.co.board1.service.BoardService"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="kr.co.board1.bean.BoardBean"%>
@@ -12,12 +13,19 @@
 	UserBean ub = (UserBean) session.getAttribute("user");
 	String nick = null;
 	 
-	List<BoardBean> list = new ArrayList<>(); // List<BoardBean> list : 선언, list = new ArrayList<>(); : 생성
-
+	List<BoardBean> list = new ArrayList<>();	// List<BoardBean> list : 선언, list = new ArrayList<>(); : 생성
+	int totalPage = 0;
+	
 	if(ub == null){		// 세션에 저장되어 있는 사용자 정보가 없음
 		// 로그인을 안 했을 때(로그인 하도록 돌려보냄)
 		response.sendRedirect("./user/login.jsp?result=101");
 	}else{				// 세션에 저장되어 있는 사용자 정보가 있음
+		
+		BoardService bs = new BoardService();
+	
+		int total = bs.getTotalBoard();
+		totalPage = bs.getTotalPage(total);
+		
 		// 로그인을 했을 때
 		nick = ub.getNick();
 	
@@ -54,9 +62,6 @@
 		psmt.close();
 		conn.close();
 	}
-	
-	
-	
 	
 %>
 <!DOCTYPE html>
@@ -96,8 +101,12 @@
 			<!-- 페이징 -->
 			<nav class="paging">
 				<span> 
-				<a href="#" class="prev">이전</a>
-				<a href="#" class="num">1</a>
+				<a href="#" class="prev">이전</a>.
+				
+				<% for(int i=1; i<=totalPage; i++) { %>
+				<a href="#" class="num"><%= i %></a>
+				<% } %>
+				
 				<a href="#" class="next">다음</a>
 				</span>
 			</nav>
@@ -106,13 +115,5 @@
 	</body>
 
 </html>
-
-
-
-
-
-
-
-
 
 

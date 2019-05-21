@@ -57,7 +57,7 @@ public class BoardService {
 	}
 	
 	// 페이지그룹 계산하기
-	public int[] getPageGroupStartEnd(String pg, int totalPage) {
+	public int[] getPageGroupStartEnd(String pg, int totalPage) {	// 메서드 생성 및 매개변수
 		
 		int[] groupStartEnd = new int[2];	// 2개짜리 배열
 		
@@ -162,5 +162,68 @@ public class BoardService {
 	
 	// 게시물 추가하기
 	public void insertBoard() {}
+	
+	// 조회수 업데이트
+	public void updateHit(String seq) throws Exception {
+		
+		// 1단계, 2단계
+		Connection conn = DBConfig.getConnection();
+		
+		// 3단계
+		PreparedStatement psmt = conn.prepareStatement(SQL.UPDATE_HIT);
+		psmt.setString(1, seq);
+		
+		// 4단계
+		psmt.executeUpdate();
+		
+		// 5단계
+		
+		
+		// 6단계
+		psmt.close();
+		conn.close();
+		
+	}
+	
+	// 글보기 select
+	public BoardBean viewBoard(String seq) throws Exception {	// 쿼리문 실행할 때 예외처리해야함
+		
+		// 1단계, 2단계
+		Connection conn = DBConfig.getConnection();
+		
+		// 3단계
+		PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_VIEW); // 글번호로 글 식별하여 출력
+		psmt.setString(1, seq);	// setString : '' ↔ setInt : 따옴표 없음
+		
+		
+		// 4단계
+		ResultSet rs = psmt.executeQuery();
+		
+		// 5단계
+		BoardBean bb = new BoardBean();	// bean 객체 생성하여 if문을 반복하여 데이터를 넣음
+		
+		if(rs.next()){	// 1개의 레코드를 반복하므로 while문 사용하지 않아도 됨
+			
+			bb.setSeq(rs.getInt(1));
+			bb.setParent(rs.getInt(2));
+			bb.setComment(rs.getInt(3));
+			bb.setCate(rs.getString(4));
+			bb.setTitle(rs.getString(5));
+			bb.setContent(rs.getString(6));
+			bb.setFile(rs.getInt(7));	// file은 1또는 0 → int
+			bb.setHit(rs.getInt(8));
+			bb.setUid(rs.getString(9));
+			bb.setRegip(rs.getString(10));
+			bb.setRdate(rs.getString(11));
+			
+		}
+		
+		// 6단계
+		rs.close();
+		psmt.close();
+		conn.close();
+		
+		return bb; // 메서드의 반환타입 void → BoardBean
+	}
 	
 }

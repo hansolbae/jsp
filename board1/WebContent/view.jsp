@@ -1,4 +1,24 @@
+<%@page import="kr.co.board1.service.BoardService"%>
+<%@page import="kr.co.board1.bean.BoardBean"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="kr.co.board1.config.SQL"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.board1.config.DBConfig"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	
+	String pg  = request.getParameter("pg");	// list.jsp에서 전달받은 파라미터 값 → list.jsp로 다시 전달
+	String seq = request.getParameter("seq");	// list.jsp에서 전달받은 seq값
+	
+	
+	BoardService service = BoardService.getInstance();	// 싱글톤 객체(객체 생성 불가능)
+	
+	service.updateHit(seq);	// 리턴할 필요x
+	BoardBean bb = service.viewBoard(seq);	// 리턴
+	
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -14,29 +34,35 @@
 					<table>
 						<tr>
 							<td>제목</td>
-							<td><input type="text" name="subject" value="테스트 제목 입니다." readonly />
+							<td><input type="text" name="subject" value="<%= bb.getTitle() %>" readonly />
 							</td>
 						</tr>
 						
-						<tr>
-							<td>첨부파일</td>
-							<td>
-								<a href="#">테스트.hwp</a>
-								<span>3회 다운로드</span>
-							</td>
-						</tr>
+						<%
+							if(bb.getFile() == 1){	// 첨부파일이 있으면 출력, 없으면 출력x
+						%>
+							<tr>
+								<td>첨부파일</td>
+								<td>
+									<a href="#">테스트.hwp</a>
+									<span>3회 다운로드</span>
+								</td>
+							</tr>
+						<%
+							}
+						%>
 						
 						<tr>
 							<td>내용</td>
 							<td>
-								<textarea name="content" rows="20" readonly>테스트 내용 입니다.</textarea>
+								<textarea name="content" rows="20" readonly><%= bb.getContent() %></textarea>
 							</td>
 						</tr>
 					</table>
 					<div class="btns">
 						<a href="#" class="cancel del">삭제</a>
 						<a href="#" class="cancel mod">수정</a>
-						<a href="#" class="cancel">목록</a>
+						<a href="./list.jsp?pg=<%= pg %>" class="cancel">목록</a><!-- 파라미터값 다시 전달 -->
 					</div>
 				</form>
 			</div><!-- view 끝 -->

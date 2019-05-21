@@ -16,6 +16,7 @@
 	List<BoardBean> list = new ArrayList<>();	// List<BoardBean> list : 선언, list = new ArrayList<>(); : 생성
 	int totalPage = 0;
 	int listCount = 0;
+	int current = 0;
 	int[] groupStartEnd = new int[2];	// 배열 생성
 	
 	if(ub == null){		// 세션에 저장되어 있는 사용자 정보가 없음
@@ -41,6 +42,9 @@
 		
 		// 목록 페이지 그룹 번호
 		groupStartEnd = bs.getPageGroupStartEnd(pg, totalPage);	// 리턴해야 html에서 사용가능함
+		
+		// 현재 페이지번호
+		current = bs.getCurrentPage(pg);	// 문자열 파라미터를 숫자로 변환
 		
 	}
 	
@@ -70,7 +74,7 @@
 					<% for(BoardBean bb : list){ %>
 					<tr>
 						<td><%= listCount-- %></td>
-						<td><a href="#"><%= bb.getTitle() %></a>&nbsp;[<%= bb.getComment() %>]</td>
+						<td><a href="./view.jsp?pg=<%= current %>&seq=<%= bb.getSeq() %>"><%= bb.getTitle() %></a>&nbsp;[<%= bb.getComment() %>]</td><!-- view.jsp로 파라미터 값&글번호 값 전달 -->
 						<td><%= bb.getNick() %></td>
 						<td><%= bb.getRdate().substring(2, 10) %></td>
 						<td><%= bb.getHit() %></td>
@@ -81,14 +85,20 @@
 			</div>
 			<!-- 페이징 -->
 			<nav class="paging">
-				<span> 
-				<a href="./list.jsp?pg=<%= groupStartEnd[0] - 1 %>" class="prev">이전</a>.
-				
-				<% for(int i=groupStartEnd[0]; i<=groupStartEnd[1]; i++) { %>	<!-- 배열의 첫번째, 두번째 사용 -->
-				<a href="./list.jsp?pg=<%= i %>" class="num"><%= i %></a> <!-- 파라미터 번호로 페이지 번호 전달 -->
+				<span>
+				<% if(groupStartEnd[0] > 1){ %>
+					<a href="./list.jsp?pg=<%= groupStartEnd[0] - 1 %>" class="prev">이전</a>
 				<% } %>
 				
-				<a href="./list.jsp?pg=<%= groupStartEnd[1] + 1 %>" class="next">다음</a>
+				<% for(int i=groupStartEnd[0]; i<=groupStartEnd[1]; i++) { %>	<!-- 배열의 첫번째, 두번째 사용 -->
+					
+					<a href="./list.jsp?pg=<%= i %>" class="num <%= (current == i)?"current":"" %>"><%= i %></a><!-- 파라미터 번호로 페이지 번호 전달/삼항연산자 이용 -->
+					
+				<% } %>
+				
+				<% if(groupStartEnd[1] < totalPage){ %>
+					<a href="./list.jsp?pg=<%= groupStartEnd[1] + 1 %>" class="next">다음</a>
+				<% } %>
 				</span>
 			</nav>
 			<a href="/board1/write.jsp" class="btnWrite">글쓰기</a>

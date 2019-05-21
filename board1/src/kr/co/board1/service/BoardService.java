@@ -13,6 +13,34 @@ import kr.co.board1.config.SQL;
 
 public class BoardService {
 	
+	// 싱글톤 객체
+	private static BoardService service = new BoardService();	// 객체 생성
+	
+	private BoardService() {}	// BoardService를 new하지 못함
+	public static BoardService getInstance() {	// BoardService가 static이므로 똑같이 static으로 맞춰주기
+		return service;
+	}
+	
+	// 목록용 카운트 번호 구하기
+	public int getListStartCount(int total, int start) {
+		return total-start;	// start는 10개씩 이므로
+	}
+	
+	// 현재 페이지
+	public int getCurrentPage(String pg) {
+		
+		int current = 0;
+		
+		// null 체크
+		if(pg == null) {
+			current = 1; 
+		}else {
+			current = Integer.parseInt(pg);
+		}	// 파라미터값을 숫자로 바꿈
+		
+		return current;	// 숫자로 리턴
+	}
+	
 	// Limit용 Start값 구하기
 	public int getStartForLimit(String pg) {
 		
@@ -28,7 +56,27 @@ public class BoardService {
 		return (start - 1) * 10;		// start - 1 : 1페이지는 seq 0번부터 시작하므로
 	}
 	
-	// 전체 게시물 구하기
+	// 페이지그룹 계산하기
+	public int[] getPageGroupStartEnd(String pg, int totalPage) {
+		
+		int[] groupStartEnd = new int[2];	// 2개짜리 배열
+		
+		int current = getCurrentPage(pg);	// pg=1이면 current=1, pg=2이면 current=2
+		int currentGroup = (int) Math.ceil(current/10.0);	// currentGroup = 현재 페이지의 그룹
+		int groupStart = (currentGroup - 1) * 10 + 1;	// 각 그룹의 start값 구함
+		int groupEnd   = currentGroup * 10;				// 각 그룹의 end값 구함
+		
+		if(groupEnd > totalPage){		// end값의 조건, totalPage : getTotalPage메서드 호출해야함
+			groupEnd = totalPage;
+		}
+		
+		groupStartEnd[0] = groupStart;
+		groupStartEnd[1] = groupEnd;	// 2개짜리 배열에 start값, end값을 각각 담아놓음
+		
+		return groupStartEnd;	// 리턴하기 위해 void → int[] 변환
+	}
+	
+	// 전체 페이지 수 구하기
 	public int getTotalPage(int boardTotal) {
 				
 		int pageTotal = 0;	// 페이지 수 = 전체 게시물 / 10 (+1)
@@ -42,7 +90,7 @@ public class BoardService {
 		return pageTotal;
 	}
 	
-	// 전체 페이지 수 구하기(메서드 추가)
+	// 전체 게시물 구하기(메서드 추가)
 	public int getTotalBoard() throws Exception {
 		
 		// 1단계, 2단계
@@ -77,7 +125,7 @@ public class BoardService {
 		Connection conn = DBConfig.getConnection();
 		
 		// 3단계
-		PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_LIST); // '?'가 없기 때문에 맵핑할 데이터가 없음
+		PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_LIST);
 		psmt.setInt(1, start); // 메서드 실행할 때 start 값을 받아오기 위해 매개변수 이용
 		
 		// 4단계

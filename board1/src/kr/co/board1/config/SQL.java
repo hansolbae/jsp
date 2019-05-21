@@ -39,7 +39,7 @@ public class SQL {
 	public static final String SELECT_LIST = "SELECT a.*, b.nick FROM `JSP_BOARD` AS a "
 										   + "JOIN `JSP_USER` AS b ON a.uid = b.uid "
 										   + "ORDER BY seq DESC "	// 시퀀스 번호가 큰 순서대로(최신순) 출력
-										   + "LIMIT ?, 10";			// LIMIT 0, 10/ LIMIT 10, 10/ LIMIT 20, 10 ... '?' prepardStatement 처리
+										   + "LIMIT ?, 10";			// LIMIT 0, 10/ LIMIT 10, 10/ LIMIT 20, 10 ... '?', PreparedStatement 처리
 	
 	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `JSP_BOARD`;";
 	

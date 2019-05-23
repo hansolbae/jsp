@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@page import="kr.co.board1.service.BoardService"%>
 <%@page import="kr.co.board1.bean.BoardBean"%>
 <%@page import="java.sql.ResultSet"%>
@@ -18,6 +19,10 @@
 	service.updateHit(seq);	// 리턴할 필요x
 	BoardBean bb = service.viewBoard(seq);	// 리턴
 	
+	// 댓글 리스트 가져오기
+	List<BoardBean> commentList = service.commentList(seq);	// 리턴, ArrayList→List : 자바의 다형성(=객체간의 결합도를 느슨하게 함)
+	
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -25,6 +30,7 @@
 		<meta charset="UTF-8" />
 		<title>글보기</title> 
 		<link rel="stylesheet" href="./css/style.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 	<body>
 		<div id="board">
@@ -60,7 +66,7 @@
 						</tr>
 					</table>
 					<div class="btns">
-						<a href="#" class="cancel del">삭제</a>
+						<a onclick="return confirm('정말로 삭제하시겠습니까?')" href="./proc/delete.jsp?pg=<%= pg %>&seq=<%= bb.getSeq() %>" class="cancel del">삭제</a>
 						<a href="#" class="cancel mod">수정</a>
 						<a href="./list.jsp?pg=<%= pg %>" class="cancel">목록</a><!-- 파라미터값 다시 전달 -->
 					</div>
@@ -70,22 +76,30 @@
 			<!-- 댓글리스트 -->
 			<section class="comments">
 				<h3>댓글목록</h3>
-				
-				<div class="comment">
+				<!-- 댓글갯수만큼 생성된 댓글 객체(=BoardBean)를 ArrayList로 출력 -->
+				<%
+					for(BoardBean comment : commentList){
+				%>
+				<div class="comment"><!-- 댓글이 있을 때 출력 -->
 					<span>
-						<span>홍길동</span>
-						<span>18-03-01</span>
+						<span><%= comment.getUid() %></span>
+						<span><%= comment.getRdate().substring(2, 10) %></span>
 					</span>
-					<textarea>테스트 댓글입니다.</textarea>
+					<textarea><%= comment.getContent() %></textarea>
 					<div>
 						<a href="#" class="del">삭제</a>
 						<a href="#" class="mod">수정</a>
 					</div>
 				</div>
-			
-				<p class="empty">
-					등록된 댓글이 없습니다.
-				</p>
+				<%
+					}
+				
+					if(commentList.size() == 0){
+				%>
+				<p class="empty"><!-- 댓글이 없을 때 출력 -->등록된 댓글이 없습니다.</p>
+				<%
+					}
+				%>
 				
 			</section>
 			
@@ -94,12 +108,59 @@
 				<h3>댓글쓰기</h3>
 				<div>
 					<form action="#" method="post">
+						<input type="hidden" name="parent" value=<%= bb.getSeq() %> /><!-- 부모글번호(seq) : 보일필요가 없으므로 hidden -->
 						<textarea name="comment" rows="5"></textarea>
 						<div class="btns">
 							<a href="#" class="cancel">취소</a>
 							<input type="submit" class="submit" value="작성완료" />
 						</div>
 					</form>
+					<script><!-- script 위치는 관계없음 -->
+					
+						/*$(function(){
+							var message = $('.btns .calcel del');
+							message.confirm("정말로 삭제하시겠습니까?");
+							if(message == true){
+								alert("삭제되었습니다.");
+							}else{
+								return false;
+							}
+						});*/
+					
+						$(function(){
+							
+							var btnSubmit = $('.comment_write .submit'); // comment_write 하위의 submit클래스(선택자)
+							
+							btnSubmit.click(function(){	// 클릭 이벤트 함수(사용多)
+							
+								var textarea  = $('.comment_write textarea'); // comment_write 하위의 textarea
+								var parent    = $('.comment_write input[name=parent]').val();
+								var content   = textarea.val(); // val=value(데이터)
+								
+								if(content == ""){ // 댓글 내용이 없다면
+									alert('댓글 내용을 입력하세요.');
+									textarea.focus();
+								}else{
+									var jsonData = {parent:parent, content:content};
+									
+									$.ajax({
+										url: './proc/commentWrite.jsp',
+										type: 'post',	// url에서 파라미터 값을 따로 지정하게 되면 get방식 사용
+										dataType: 'json',
+										data: jsonData,
+										success: function(result){
+											
+											alert(result.content);
+											
+										}										
+									});	
+								}
+								
+								return false;  // 폼전송 취소(페이지 이동x)
+								
+							});
+						});
+					</script>
 				</div>
 			</section>
 		</div><!-- board 끝 -->

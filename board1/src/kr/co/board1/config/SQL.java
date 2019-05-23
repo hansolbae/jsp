@@ -38,6 +38,7 @@ public class SQL {
 	
 	public static final String SELECT_LIST = "SELECT a.*, b.nick FROM `JSP_BOARD` AS a "
 										   + "JOIN `JSP_USER` AS b ON a.uid = b.uid "
+										   + "WHERE parent=0 "		// parent=0 : 원글(댓글x)
 										   + "ORDER BY seq DESC "	// 시퀀스 번호가 큰 순서대로(최신순) 출력
 										   + "LIMIT ?, 10";			// LIMIT 0, 10/ LIMIT 10, 10/ LIMIT 20, 10 ... '?', PreparedStatement 처리
 	
@@ -47,4 +48,14 @@ public class SQL {
 	
 	public static final String UPDATE_HIT = "UPDATE `JSP_BOARD` SET hit=hit+1 WHERE seq=?;";
 	
+	public static final String DELETE_BOARD = "DELETE FROM `JSP_BOARD` WHERE seq=?";
+	
+	public static final String INSERT_COMMENT = "INSERT INTO `JSP_BOARD` SET "
+												+ "parent=?, "
+												+ "content=?, "
+												+ "uid=?, "
+												+ "regip=?, "
+												+ "rdate=NOW()";
+	
+	public static final String SELECT_COMMENT_LIST = "SELECT * FROM `JSP_BOARD` WHERE parent=? ORDER BY seq ASC";
 }

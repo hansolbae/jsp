@@ -215,6 +215,9 @@ public class BoardService {
 			bb.setUid(rs.getString(9));
 			bb.setRegip(rs.getString(10));
 			bb.setRdate(rs.getString(11));
+			bb.setOldName(rs.getString(13));
+			bb.setNewName(rs.getString(14));
+			bb.setDownload(rs.getInt(15));	// 다운로드 횟수
 			
 		}
 		
@@ -269,4 +272,30 @@ public class BoardService {
 		return list;	// return해주기 위해 반환타입 void → List<BoardBean>
 	}
 	
+	// 댓글 카운트 업데이트
+	public String countComment(String parent) throws Exception {
+		
+		// 1단계, 2단계
+		Connection conn = DBConfig.getConnection();
+		
+		// 3단계
+		PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_COUNT_COMMENT);
+		psmt.setString(1, parent);
+		
+		// 4단계
+		ResultSet rs = psmt.executeQuery();
+		
+		// 5단계
+		String cntComment = null;
+		while(rs.next()) {
+			cntComment = rs.getString(1);
+		}
+		
+		// 6단계
+		rs.close();
+		psmt.close();
+		conn.close();
+		
+		return cntComment;
+	}
 }

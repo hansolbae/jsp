@@ -32,11 +32,13 @@ public class SQL {
 	public static final String INSERT_BOARD = "INSERT INTO `JSP_BOARD` SET "
 											+ "title=?,"	// 글제목 : 맵핑해야하므로 있어야 함
 											+ "content=?,"	// 글내용 : 맵핑해야하므로 있어야 함
+											+ "file=?,"
 											+ "uid=?,"		// 사용자 아이디
 											+ "regip=?,"	// 사용자 IP주소
 											+ "rdate=NOW()";
 	
 	public static final String SELECT_MAX_SEQ = "SELECT MAX(seq) FROM `JSP_BOARD`";
+	
 	public static final String INSERT_FILE = "INSERT INTO `JSP_FILE` (`parent`, `oldName`, `newName`, `rdate`) VALUES (?, ?, ?, NOW())";
 	
 	public static final String SELECT_LIST = "SELECT a.*, b.nick FROM `JSP_BOARD` AS a "
@@ -47,9 +49,14 @@ public class SQL {
 	
 	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `JSP_BOARD`;";
 	
-	public static final String SELECT_VIEW = "SELECT * FROM `JSP_BOARD` WHERE seq=?";
-	
+	public static final String SELECT_VIEW = "SELECT * FROM `JSP_BOARD` AS a "
+											+ "LEFT JOIN `JSP_FILE` AS b "
+											+ "ON a.seq = b.parent "
+											+ "WHERE seq=?";
+			
 	public static final String UPDATE_HIT = "UPDATE `JSP_BOARD` SET hit=hit+1 WHERE seq=?;";
+	
+	public static final String UPDATE_DOWNLOAD = "UPDATE `JSP_FILE` SET download=download+1 WHERE parent=?";
 	
 	public static final String DELETE_BOARD = "DELETE FROM `JSP_BOARD` WHERE seq=?";
 	
@@ -63,6 +70,9 @@ public class SQL {
 	public static final String SELECT_COMMENT_LIST = "SELECT a.*, b.nick FROM `JSP_BOARD` AS a "
 													+ "JOIN `JSP_USER` AS b ON a.uid = b.uid "
 													+ "WHERE parent=? ORDER BY seq ASC";
+	
+	public static final String SELECT_COUNT_COMMENT = "SELECT COUNT(*) FROM `JSP_BOARD` AS a, `JSP_BOARD` AS b "
+													+ "WHERE b.parent=? && a.seq=b.parent";
 	
 	// public static final String DELETE_COMMENT = "DELETE FROM `JSP_BOARD` WHERE seq=? && parent=?";
 

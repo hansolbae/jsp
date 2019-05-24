@@ -16,6 +16,33 @@ public class BoardBean {	// V/O 클래스(Value Object)
 	
 	// 추가필드(닉네임)
 	private String nick;
+	private String oldName;
+	private String newName;
+	private int download;
+	
+	public String getOldName() {
+		return oldName;
+	}
+	
+	public void setOldName(String oldName) {
+		this.oldName = oldName;
+	}
+	
+	public String getNewName() {
+		return newName;
+	}
+	
+	public void setNewName(String newName) {
+		this.newName = newName;
+	}
+	
+	public int getDownload() {
+		return download;
+	}
+	
+	public void setDownload(int download) {
+		this.download = download;
+	}
 	
 	public String getNick() {
 		return nick;

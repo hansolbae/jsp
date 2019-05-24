@@ -18,6 +18,7 @@
 	int listCount = 0;
 	int current = 0;
 	int[] groupStartEnd = new int[2];	// 배열 생성
+	String cntComment = null;
 	
 	if(ub == null){		// 세션에 저장되어 있는 사용자 정보가 없음
 		// 로그인을 안 했을 때(로그인 하도록 돌려보냄)
@@ -71,10 +72,13 @@
 						<td>조회</td>
 					</tr>
 				
-					<% for(BoardBean bb : list){ %>
+					<% for(BoardBean bb : list){ 
+						BoardService bs = BoardService.getInstance();
+						cntComment = bs.countComment(String.valueOf(bb.getSeq()));	
+					%>					
 					<tr>
 						<td><%= listCount-- %></td>
-						<td><a href="./view.jsp?pg=<%= current %>&seq=<%= bb.getSeq() %>"><%= bb.getTitle() %></a>&nbsp;[<%= bb.getComment() %>]</td><!-- view.jsp로 파라미터 값&글번호 값 전달 -->
+						<td><a href="./view.jsp?pg=<%= current %>&seq=<%= bb.getSeq() %>"><%= bb.getTitle() %></a>&nbsp;[<%= cntComment %>]</td><!-- view.jsp로 파라미터 값&글번호 값 전달 -->
 						<td><%= bb.getNick() %></td>
 						<td><%= bb.getRdate().substring(2, 10) %></td>
 						<td><%= bb.getHit() %></td>

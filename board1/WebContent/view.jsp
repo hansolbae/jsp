@@ -50,8 +50,8 @@
 							<tr>
 								<td>첨부파일</td>
 								<td>
-									<a href="#">테스트.hwp</a>
-									<span>3회 다운로드</span>
+									<a href="./proc/download.jsp?seq=<%= bb.getSeq() %>&oldName=<%= bb.getOldName() %>&newName=<%= bb.getNewName() %>"><%= bb.getOldName() %></a>
+									<span><%= bb.getDownload() %>회 다운로드</span>
 								</td>
 							</tr>
 						<%

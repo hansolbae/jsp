@@ -39,12 +39,15 @@
 	String fileName = mr.getFilesystemName("file");	// 파일명(단순 문자열, 실제 파일x)
 	String regip    = request.getRemoteAddr();
 	String newName  = null;
+	int file = 0;
 	
 	// 세션에서 사용자 아이디 가져오기
 	UserBean ub = (UserBean) session.getAttribute("user");
 	String uid = ub.getUid();
 	
 	if(fileName != null){	// null일 경우 파일 첨부x, null이 아닐 경우 파일 첨부o
+		file = 1;
+	
 		// 1.파일명 생성
 		// 확장자명 분리
 		int i = fileName.lastIndexOf("."); // 특정 문자열을 뽑아내는 메서드 이용 : 확장자명을 따로 분리하기 위함
@@ -105,8 +108,9 @@
 	PreparedStatement psmt = conn.prepareStatement(SQL.INSERT_BOARD);
 	psmt.setString(1, subject);
 	psmt.setString(2, content);
-	psmt.setString(3, uid);
-	psmt.setString(4, regip);
+	psmt.setInt(3, file);		// 파일 첨부하면 1, 첨부하지 않으면 0값 출력
+	psmt.setString(4, uid);
+	psmt.setString(5, regip);
 	
 	// 4단계
 	psmt.executeUpdate();

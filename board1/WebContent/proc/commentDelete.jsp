@@ -1,4 +1,4 @@
-<%-- 글삭제 : 처리페이지 --%>
+<%-- 댓글삭제 : 처리페이지, delete.jsp 복사해서 수정함 --%>
 <%@page import="kr.co.board1.config.SQL"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Connection"%>
@@ -6,8 +6,9 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String seq = request.getParameter("seq");
-	String pg  = request.getParameter("pg");
+	String seq    = request.getParameter("seq");
+	String parent = request.getParameter("parent");
+	String pg     = request.getParameter("pg");
 	
 	// 1단계, 2단계
 	Connection conn = DBConfig.getConnection(); 
@@ -25,7 +26,11 @@
 	psmt.close();
 	conn.close();
 	
-	// 글목록 화면 이동
-	response.sendRedirect("../list.jsp?pg="+pg);
-
+	// null 체크
+	if(parent == null){
+		response.sendRedirect("../list.jsp?pg="+pg);
+	}else{
+		response.sendRedirect("../view.jsp?seq="+parent+"&pg="+pg);
+	}
+	
 %>

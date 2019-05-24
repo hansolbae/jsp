@@ -1,4 +1,6 @@
 <%-- 댓글쓰기 : 처리페이지 --%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="kr.co.board1.bean.UserBean"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="kr.co.board1.config.SQL"%>
@@ -35,8 +37,14 @@
 	
 		
 	// JSON 데이터 생성
+	Date date = new Date();	 // Date 클래스 이용
+	SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");	// MM=월, mm=분(시간)
+	String today = sdf.format(date);
+	
 	JSONObject json = new JSONObject();
 	json.put("content", content);
+	json.put("nick", ub.getNick());	// 세션에 저장된 UserBean 객체
+	json.put("rdate", today);
 	
 	out.print(json);
 	

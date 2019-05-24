@@ -10,7 +10,7 @@
 		<div id="board">
 			<h3>글쓰기</h3>
 			<div class="write">
-				<form action="/board1/proc/write.jsp" method="post">
+				<form action="/board1/proc/write.jsp" method="post" enctype="multipart/form-data"><!-- 파일을 업로드하기 위해 form-data 입력해야 함 -->
 					<table>
 						<tr>
 							<td>제목</td>

@@ -243,7 +243,7 @@ public class BoardService {
 		List<BoardBean> list = new ArrayList<>();
 	/* 인터페이스                                            구체화                */
 		
-		while(rs.next()) {			// bb객체 생성하여 11개의 데이터를 저장함 → list에 저장함
+		while(rs.next()) {			// bb객체 생성하여 12개의 데이터를 저장함 → list에 저장함
 			BoardBean bb = new BoardBean();
 			bb.setSeq(rs.getInt(1));
 			bb.setParent(rs.getInt(2));
@@ -256,6 +256,7 @@ public class BoardService {
 			bb.setUid(rs.getString(9));
 			bb.setRegip(rs.getString(10));
 			bb.setRdate(rs.getString(11));
+			bb.setNick(rs.getString(12));
 			
 			list.add(bb);
 		}
@@ -267,4 +268,5 @@ public class BoardService {
 		
 		return list;	// return해주기 위해 반환타입 void → List<BoardBean>
 	}
+	
 }

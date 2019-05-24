@@ -36,6 +36,9 @@ public class SQL {
 											+ "regip=?,"	// 사용자 IP주소
 											+ "rdate=NOW()";
 	
+	public static final String SELECT_MAX_SEQ = "SELECT MAX(seq) FROM `JSP_BOARD`";
+	public static final String INSERT_FILE = "INSERT INTO `JSP_FILE` (`parent`, `oldName`, `newName`, `rdate`) VALUES (?, ?, ?, NOW())";
+	
 	public static final String SELECT_LIST = "SELECT a.*, b.nick FROM `JSP_BOARD` AS a "
 										   + "JOIN `JSP_USER` AS b ON a.uid = b.uid "
 										   + "WHERE parent=0 "		// parent=0 : 원글(댓글x)
@@ -57,5 +60,12 @@ public class SQL {
 												+ "regip=?, "
 												+ "rdate=NOW()";
 	
-	public static final String SELECT_COMMENT_LIST = "SELECT * FROM `JSP_BOARD` WHERE parent=? ORDER BY seq ASC";
+	public static final String SELECT_COMMENT_LIST = "SELECT a.*, b.nick FROM `JSP_BOARD` AS a "
+													+ "JOIN `JSP_USER` AS b ON a.uid = b.uid "
+													+ "WHERE parent=? ORDER BY seq ASC";
+	
+	// public static final String DELETE_COMMENT = "DELETE FROM `JSP_BOARD` WHERE seq=? && parent=?";
+
+	
+	
 }

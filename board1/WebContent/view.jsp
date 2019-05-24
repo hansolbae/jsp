@@ -74,23 +74,40 @@
 			</div><!-- view 끝 -->
 			
 			<!-- 댓글리스트 -->
+			<style>
+				.comments > .comment:nth-of-type(1) {
+					display: none;	/* 보이지 않도록 처리 */
+				}
+			</style>
 			<section class="comments">
 				<h3>댓글목록</h3>
-				<!-- 댓글갯수만큼 생성된 댓글 객체(=BoardBean)를 ArrayList로 출력 -->
-				<%
-					for(BoardBean comment : commentList){
-				%>
-				<div class="comment"><!-- 댓글이 있을 때 출력 -->
+				<div class="comment"><!-- 가짜 commentView : 출력x(style 지정) -->
 					<span>
-						<span><%= comment.getUid() %></span>
-						<span><%= comment.getRdate().substring(2, 10) %></span>
+						<span class="nick">닉네임</span>
+						<span class="rdate">날짜</span>
 					</span>
-					<textarea><%= comment.getContent() %></textarea>
+					<textarea>내용</textarea>
 					<div>
 						<a href="#" class="del">삭제</a>
 						<a href="#" class="mod">수정</a>
 					</div>
 				</div>
+				
+				<!-- 댓글갯수만큼 생성된 댓글 객체(=BoardBean)를 ArrayList로 출력 -->
+				<%
+					for(BoardBean comment :commentList){	// comment = 댓글고유번호(seq)
+				%>
+					<div class="comment"><!-- 댓글이 있을 때 출력, commentList 갯수만큼 생성됨 -->
+						<span>
+							<span class="nick"><%= comment.getNick() %></span>
+							<span class="rdate"><%= comment.getRdate().substring(2, 10) %></span>
+						</span>
+						<textarea><%= comment.getContent() %></textarea>
+						<div>
+							<a href="./proc/commentDelete.jsp?seq=<%= comment.getSeq() %>&parent=<%= seq %>&pg=<%= pg %>" class="del">삭제</a>
+							<a href="#" class="mod">수정</a>
+						</div>
+					</div>
 				<%
 					}
 				
@@ -129,10 +146,11 @@
 					
 						$(function(){
 							
+							var comments = $('.comments');
 							var btnSubmit = $('.comment_write .submit'); // comment_write 하위의 submit클래스(선택자)
 							
 							btnSubmit.click(function(){	// 클릭 이벤트 함수(사용多)
-							
+								var commentView = $('.comments > .comment:nth-of-type(1)');
 								var textarea  = $('.comment_write textarea'); // comment_write 하위의 textarea
 								var parent    = $('.comment_write input[name=parent]').val();
 								var content   = textarea.val(); // val=value(데이터)
@@ -148,10 +166,23 @@
 										type: 'post',	// url에서 파라미터 값을 따로 지정하게 되면 get방식 사용
 										dataType: 'json',
 										data: jsonData,
-										success: function(result){
+										success: function(result){	// result={content:~~, nick:000, rdate:00-00-00}
+											var commentNew = commentView.clone();	// 객체 복사
+										
+											commentNew.find('.nick').text(result.nick);
+											commentNew.find('.rdate').text(result.rdate);
+											commentNew.find('textarea').text(result.content);
 											
-											alert(result.content);
+											comments.append(commentNew);
 											
+											textarea.val('');
+											
+											// empty 문구삭제(댓글 입력 시 '등록된 댓글이 없습니다' 문구 삭제)
+											var empty = $('.empty');
+											
+											if(empty.is(':visible')){
+												empty.remove();
+											}
 										}										
 									});	
 								}

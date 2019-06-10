@@ -9,7 +9,7 @@ public class LoginService implements CommonService {
 
 	@Override
 	public String requestProc(HttpServletRequest req, HttpServletResponse resp) {
-		return "/index.jsp";
+		return "/user/login.jsp";
 	}
 	
 }

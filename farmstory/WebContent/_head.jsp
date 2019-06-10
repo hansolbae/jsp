@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>팜스토리</title>
     <link rel="stylesheet" href="/farmstory/css/style.css"/>
+    <link rel="stylesheet" href="/farmstory/css/board.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/farmstory/js/slider.js"></script>
   </head>
@@ -13,9 +14,9 @@
       <header>
         <a href="#"><img src="/farmstory/img/logo.png" alt="로고"></a>
         <p>
-          <a href="#">HOME |</a>
-          <a href="#">회원가입 |</a>
-          <a href="#">로그인 |</a>
+          <a href="/farmstory/index.do">HOME |</a>
+          <a href="/farmstory/user/terms.do">회원가입 |</a>
+          <a href="/farmstory/user/login.do">로그인 |</a>
           <a href="#">로그아웃 |</a>
           <a href="#">고객센터</a>
         </p>

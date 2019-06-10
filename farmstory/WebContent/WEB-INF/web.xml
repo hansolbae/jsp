@@ -19,7 +19,7 @@
   <!-- 서블릿 요청주소 등록 -->
   <servlet-mapping>
   	<servlet-name>MainController</servlet-name>
-  	<url-pattern>/</url-pattern>
+  	<url-pattern>*.do</url-pattern>
   </servlet-mapping>
     
   <!-- UTF-8 인코딩 필터 등록 -->

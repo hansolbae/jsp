@@ -12,7 +12,7 @@
   <body>
     <div id="wrapper">
       <header>
-        <a href="#"><img src="/farmstory/img/logo.png" alt="로고"></a>
+        <a href="/farmstory/index.do"><img src="/farmstory/img/logo.png" alt="로고"></a>
         <p>
           <a href="/farmstory/index.do">HOME |</a>
           <a href="/farmstory/user/terms.do">회원가입 |</a>

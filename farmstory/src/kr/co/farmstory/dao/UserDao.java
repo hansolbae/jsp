@@ -52,7 +52,45 @@ public class UserDao {
 	}
 	
 	// 로그인
-	public void login() throws Exception {}
+	public UserVO login(String uid, String pass) throws Exception {
+		
+		// 1단계, 2단계
+		Connection conn = DBConfig.getConnection();
+		
+		// 3단계
+		PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_USER);
+		psmt.setString(1, uid);
+		psmt.setString(2, pass);
+		
+		// 4단계
+		ResultSet rs = psmt.executeQuery();
+		
+		// 5단계
+		UserVO vo = null;
+		
+		if(rs.next()) {
+			vo = new UserVO();
+			vo.setUid(rs.getString(1));
+			vo.setPass(rs.getString(2));
+			vo.setName(rs.getString(3));
+			vo.setNick(rs.getString(4));
+			vo.setEmail(rs.getString(5));
+			vo.setHp(rs.getString(6));
+			vo.setGrade(rs.getInt(7));
+			vo.setZip(rs.getString(8));
+			vo.setAddr1(rs.getString(9));
+			vo.setAddr2(rs.getString(10));
+			vo.setRegip(rs.getString(11));
+			vo.setRdate(rs.getString(12));
+		}
+		
+		// 6단계
+		rs.close();
+		psmt.close();
+		conn.close();
+		
+		return vo;
+	}
 	
 	// 회원가입
 	public void register(UserVO vo) throws Exception {

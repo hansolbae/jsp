@@ -1,4 +1,6 @@
-// 아이디 중복체크
+/**
+ * 아이디 중복체크
+ */ 
 $(function(){
 	
 	$('input[name=id]').focusout(function(){

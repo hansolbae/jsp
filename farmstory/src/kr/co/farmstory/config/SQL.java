@@ -30,6 +30,7 @@ public class SQL {
 	
 	// 게시판관련
 	public static final String INSERT_BOARD = "INSERT INTO `JSP_BOARD` SET "
+											+ "cate=?,"
 											+ "title=?,"	// 글제목 : 맵핑해야하므로 있어야 함
 											+ "content=?,"	// 글내용 : 맵핑해야하므로 있어야 함
 											+ "file=?,"

@@ -9,7 +9,7 @@ public class ViewService implements CommonService {
 
 	@Override
 	public String requestProc(HttpServletRequest req, HttpServletResponse resp) {
-		return "/index.jsp";
+		return "/board/view.jsp";
 	}
 	
 }

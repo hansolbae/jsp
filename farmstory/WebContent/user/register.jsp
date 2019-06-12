@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../_head.jsp" %>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/farmstory/js/userDuplicateCheck.js"></script>
+<script src="/farmstory/js/zipcode.js"></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <div id="member">
 	<section class="register">
 		<form id="regForm" action="/farmstory/user/register.do" method="POST">

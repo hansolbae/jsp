@@ -26,7 +26,6 @@
 	<h3>글목록</h3>
 	<!-- 리스트 -->
 	<div class="list">
-		<p class="logout">${ user.nick }님! 반갑습니다. <a href="/farmstory/user/logout.do">[로그아웃]</a><p>
 		<table>
 			<tr>
 				<td>번호</td>
@@ -60,7 +59,7 @@
 			<a href="#" class="next">다음</a>
 		</span>
 	</nav>
-	<a href="/board2/write.do" class="btnWrite">글쓰기</a>
+	<a href="/farmstory/board/write.do" class="btnWrite">글쓰기</a>
 </div>
 		
 <!-- 컨텐츠 내용 끝 -->

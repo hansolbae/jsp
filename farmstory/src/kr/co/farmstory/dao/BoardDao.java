@@ -3,6 +3,7 @@ package kr.co.farmstory.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class BoardDao {
 		
 	}
 	
+	// 게시물 출력하기
 	public List<BoardVO> list(String cate, int start) throws Exception {
 		
 		// 1단계, 2단계
@@ -87,4 +89,31 @@ public class BoardDao {
 		return list;
 	}
 	
+	// 전체 게시물 갯수 구하기
+	public int getTotalCount(String cate) throws Exception {
+			
+		// 1단계, 2단계
+		Connection conn = DBConfig.getConnection();
+		
+		// 3단계
+		PreparedStatement psmt = conn.prepareStatement(SQL.SELECT_COUNT_TOTAL);
+		psmt.setString(1, cate);
+		
+		// 4단계
+		ResultSet rs = psmt.executeQuery();
+		
+		// 5단계
+		int total = 0;
+		
+		if(rs.next()) {
+			total = rs.getInt(1);
+		}
+		
+		// 6단계
+		rs.close();
+		psmt.close();
+		conn.close();
+		
+		return total;
+	}
 }

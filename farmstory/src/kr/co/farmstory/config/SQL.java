@@ -29,6 +29,11 @@ public class SQL {
 	
 	
 	// 게시판관련
+	public static final String SELECT_LATEST = "SELECT * FROM `JSP_BOARD` "
+											+ "WHERE cate=? "
+											+ "ORDER BY seq DESC "
+											+ "LIMIT 5;";
+	
 	public static final String INSERT_BOARD = "INSERT INTO `JSP_BOARD` SET "
 											+ "cate=?,"
 											+ "title=?,"	// 글제목 : 맵핑해야하므로 있어야 함
@@ -46,7 +51,7 @@ public class SQL {
 										   + "ORDER BY seq DESC "			// 시퀀스 번호가 큰 순서대로(최신순) 출력
 										   + "LIMIT ?, 10";					// LIMIT 0, 10/ LIMIT 10, 10/ LIMIT 20, 10 ... '?', PreparedStatement 처리
 	
-	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `JSP_BOARD` where cate=?;";
+	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `JSP_BOARD` WHERE cate=?;";
 	public static final String SELECT_VIEW = "SELECT * FROM `JSP_BOARD` AS a "
 											+ "LEFT JOIN `JSP_FILE` AS b "
 											+ "ON a.seq = b.parent "
